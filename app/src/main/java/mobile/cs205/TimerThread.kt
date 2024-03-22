@@ -1,75 +1,47 @@
 package mobile.cs205
 
 fun main() {
-    // Start the interval timer thread
-    val intervalTimerThread = IntervalTimerThread(10)
-    intervalTimerThread.start()
-
-    // Start the continuous timer thread
-    val continuousTimerThread = ContinuousTimerThread(10)
-    continuousTimerThread.start()
+    val sharedTime = SharedTime(10)
+    // Start the combined timer thread
+    val combinedTimerThread = CombinedTimerThread(sharedTime)
+    combinedTimerThread.start()
 }
 
-class IntervalTimerThread(private val totalTime: Int) : Thread() {
-    private var timePassed = 0
+data class SharedTime(@Volatile var time: Int)
+
+class CombinedTimerThread(private val sharedTime: SharedTime) : Thread() {
+    private var intervalProgress = 1000 // Set to 1 second initially
+    private val initialTime = sharedTime.time
 
     override fun run() {
-        while (timePassed <= totalTime) {
-            val timeRemaining = totalTime - timePassed
+        var elapsed = 0
 
-            synchronized(this) {
-                // Calculate progress as a percentage
-                val progress = (timePassed.toFloat() / totalTime * 100).toInt()
-                println("Interval Timer - Time remaining: $timeRemaining seconds - Progress: $progress%")
+        while (sharedTime.time > 0) {
+            sleep(100) // Update every 0.1 second
+            elapsed += 100
+
+            // Decrement the interval progress
+            intervalProgress -= 100
+
+            // Every second, decrement the shared time and reset the interval progress
+            if (intervalProgress <= 0) {
+                synchronized(sharedTime) {
+                    sharedTime.time--
+                    intervalProgress = 1000
+                }
+                // Interval update
+                println("Interval Timer - Time remaining: ${sharedTime.time} seconds")
             }
 
-            // Pretend this is UI update
-            // runOnUiThread { /* Update UI elements here */ }
+            // Continuous update
+            val progress = (elapsed.toFloat() / (initialTime * 1000) * 100).toInt()
+            println("Continuous Timer - Time remaining: ${sharedTime.time} seconds - Progress: $progress%")
 
-            if (timePassed == totalTime) {
-                break
-            }
-
-            try {
-                sleep(1000) // Wait for 1 second
-            } catch (ex: InterruptedException) {
-                println(ex.message)
-                break
-            }
-
-            timePassed++
+            // Update UI safely outside of the synchronized block if necessary
+            // runOnUiThread { /* Update UI elements here with progress */ }
         }
-    }
-}
 
-class ContinuousTimerThread(private val totalTime: Int) : Thread() {
-    private var timePassedMillis = 0
-
-    override fun run() {
-        while (timePassedMillis <= totalTime * 1000) {
-            val timeRemaining = totalTime - timePassedMillis / 1000
-
-            synchronized(this) {
-                // Calculate continuous progress
-                val progress = (timePassedMillis.toFloat() / (totalTime * 1000) * 100).toInt()
-                println("Continuous Timer - Time remaining: $timeRemaining seconds - Progress: $progress%")
-            }
-
-            // Pretend this is UI update
-            // runOnUiThread { /* Update UI elements here */ }
-
-            if (timePassedMillis == totalTime * 1000) {
-                break
-            }
-
-            try {
-                sleep(100) // Update every 0.1 second
-            } catch (ex: InterruptedException) {
-                println(ex.message)
-                break
-            }
-
-            timePassedMillis += 100
-        }
+        // When timer reaches 0, do something if necessary
+        // runOnUiThread { /* Perform action on main thread */ }
     }
 }

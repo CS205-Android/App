@@ -35,8 +35,7 @@ fun TimerScreen(timerViewModel: TimerViewModel) {
     // This timeLeft is the time in seconds
     val timeLeft by timerViewModel.sharedTime.collectAsState()
     val isTimerRunning by timerViewModel.isTimerRunning.collectAsState()
-    val initialTime = 10 // Assuming the countdown starts from 10 seconds
-    val progress = if (timeLeft >= 0) (initialTime - timeLeft) / initialTime.toFloat() else 1f
+    val progress by timerViewModel.progress.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center
@@ -67,8 +66,6 @@ fun TimerScreen(timerViewModel: TimerViewModel) {
         ) {
             Text("Reset Progress")
         }
-
-        // Add more UI elements as needed
     }
 }
 

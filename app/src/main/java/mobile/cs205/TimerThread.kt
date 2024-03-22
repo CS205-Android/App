@@ -1,12 +1,16 @@
 package mobile.cs205
 
 fun main() {
-    val sharedTime = SharedTime(10)
+    // Define what happens on time update. For this example, it simply prints the time.
+    val onUpdate = { time: Int ->
+        println("Time updated: $time seconds")
+    }
+    val sharedTime = SharedTime(10, onUpdate)
     val combinedTimerThread = CombinedTimerThread(sharedTime)
     combinedTimerThread.start()
 }
 
-data class SharedTime(@Volatile var time: Int)
+data class SharedTime(var time: Int, var onUpdate: (Int) -> Unit) // Added an onUpdate lambda to call when updating the time
 
 class CombinedTimerThread(private val sharedTime: SharedTime) : Thread() {
     private var intervalProgress = 1000 // Set to 1 second initially
@@ -26,6 +30,7 @@ class CombinedTimerThread(private val sharedTime: SharedTime) : Thread() {
             if (intervalProgress <= 0) {
                 sharedTime.time--
                 intervalProgress = 1000
+                sharedTime.onUpdate(sharedTime.time) // Notify about the update
 
                 // Interval update
                 println("Interval Timer - Time remaining: ${sharedTime.time} seconds")

@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,8 +16,6 @@ import mobile.cs205.TimerViewModel
 import mobile.cs205.ui.theme.CS205Theme
 import java.lang.reflect.Modifier
 import androidx.compose.material3.LinearProgressIndicator
-
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +34,7 @@ class MainActivity : ComponentActivity() {
 fun TimerScreen(timerViewModel: TimerViewModel) {
     // This timeLeft is the time in seconds
     val timeLeft by timerViewModel.sharedTime.collectAsState()
+    val isTimerRunning by timerViewModel.isTimerRunning.collectAsState()
     val initialTime = 10 // Assuming the countdown starts from 10 seconds
     val progress = if (timeLeft >= 0) (initialTime - timeLeft) / initialTime.toFloat() else 1f
 
@@ -47,6 +47,26 @@ fun TimerScreen(timerViewModel: TimerViewModel) {
         LinearProgressIndicator(
             progress = progress,
         )
+        // Start button
+        Button(
+            onClick = { timerViewModel.startTimer() },
+            enabled = !isTimerRunning
+        ) {
+            Text("Start Progress")
+        }
+        // Stop button
+        Button(
+            onClick = { timerViewModel.stopTimer() },
+            enabled = isTimerRunning
+        ) {
+            Text("Stop Progress")
+        }
+        // Reset button
+        Button(
+            onClick = { timerViewModel.resetTimer() }
+        ) {
+            Text("Reset Progress")
+        }
 
         // Add more UI elements as needed
     }

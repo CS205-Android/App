@@ -1,32 +1,45 @@
 package mobile.cs205
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import mobile.cs205.CombinedTimerThread
-import mobile.cs205.SharedTime
 
 class TimerViewModel : ViewModel() {
     private val _sharedTime = MutableStateFlow(10) // Initial time
     val sharedTime: StateFlow<Int> = _sharedTime
     private var timerThread: CombinedTimerThread? = null
+    val initialTime = 10
+    private val _isTimerRunning = MutableStateFlow(false)
+    val isTimerRunning: StateFlow<Boolean> = _isTimerRunning
 
-    init {
-        // Initialize and start the timer thread
-        val sharedTimeObject = SharedTime(10)
-        timerThread = CombinedTimerThread(sharedTimeObject) {
-            // Update the time and notify observers
-            _sharedTime.value = it
+    fun startTimer() {
+        if (timerThread == null || !timerThread!!.isAlive) {
+            val sharedTimeObject = SharedTime(initialTime)
+            timerThread = CombinedTimerThread(sharedTimeObject) {
+                _sharedTime.value = it
+                if (it <= 0) {
+                    _isTimerRunning.value = false
+                }
+            }
+            timerThread?.start()
+            _isTimerRunning.value = true
         }
-        timerThread?.start()
+    }
+
+    fun stopTimer() {
+        timerThread?.interrupt()
+        timerThread = null
+        _isTimerRunning.value = false
+    }
+
+    fun resetTimer() {
+        stopTimer()
+        _sharedTime.value = initialTime
     }
 
     override fun onCleared() {
         super.onCleared()
-        timerThread?.interrupt() // Stop the thread when ViewModel is cleared
+        timerThread?.interrupt()
     }
 }
 
@@ -37,12 +50,18 @@ class CombinedTimerThread(
     private val onTimeUpdate: (Int) -> Unit
 ) : Thread() {
     override fun run() {
-        while (sharedTime.time > 0) {
-            sleep(1000) // Simulate a one-second tick
-            synchronized(sharedTime) {
-                sharedTime.time--
+        try {
+            while (!isInterrupted && sharedTime.time > 0) {
+                sleep(1000)
+                synchronized(sharedTime) {
+                    sharedTime.time--
+                }
+                onTimeUpdate(sharedTime.time)
             }
-            onTimeUpdate(sharedTime.time)
+        } catch (e: InterruptedException) {
+            // Handle the case where the thread is interrupted
+            Thread.currentThread().interrupt() // Preserve interruption status
         }
     }
 }
+

@@ -66,3 +66,4 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation("androidx.compose.material:material-icons-extended")
 }
+

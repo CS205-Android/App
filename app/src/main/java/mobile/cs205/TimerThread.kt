@@ -2,7 +2,6 @@ package mobile.cs205
 
 fun main() {
     val sharedTime = SharedTime(10)
-    // Start the combined timer thread
     val combinedTimerThread = CombinedTimerThread(sharedTime)
     combinedTimerThread.start()
 }
@@ -25,10 +24,9 @@ class CombinedTimerThread(private val sharedTime: SharedTime) : Thread() {
 
             // Every second, decrement the shared time and reset the interval progress
             if (intervalProgress <= 0) {
-                synchronized(sharedTime) {
-                    sharedTime.time--
-                    intervalProgress = 1000
-                }
+                sharedTime.time--
+                intervalProgress = 1000
+
                 // Interval update
                 println("Interval Timer - Time remaining: ${sharedTime.time} seconds")
             }
@@ -36,12 +34,6 @@ class CombinedTimerThread(private val sharedTime: SharedTime) : Thread() {
             // Continuous update
             val progress = (elapsed.toFloat() / (initialTime * 1000) * 100).toInt()
             println("Continuous Timer - Time remaining: ${sharedTime.time} seconds - Progress: $progress%")
-
-            // Update UI safely outside of the synchronized block if necessary
-            // runOnUiThread { /* Update UI elements here with progress */ }
         }
-
-        // When timer reaches 0, do something if necessary
-        // runOnUiThread { /* Perform action on main thread */ }
     }
 }

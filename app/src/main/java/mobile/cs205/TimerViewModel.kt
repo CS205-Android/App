@@ -14,14 +14,14 @@ class TimerViewModel : ViewModel() {
     val progress: StateFlow<Float> = _progress
 
     private var timerThread: CombinedTimerThread? = null
-    val initialTime = 10
+    private val initialTime = 10
     private val _isTimerRunning = MutableStateFlow(false)
     val isTimerRunning: StateFlow<Boolean> = _isTimerRunning
 
     fun startTimer() {
         if (timerThread == null || !timerThread!!.isAlive) {
-            val sharedTimeObject = SharedTime(initialTime)
-            timerThread = CombinedTimerThread(sharedTimeObject, 10000) { timeLeft, progress ->
+            SharedTime(initialTime)
+            timerThread = CombinedTimerThread(10000) { timeLeft, progress ->
                 viewModelScope.launch {
                     _sharedTime.value = timeLeft
                     _progress.value = progress // Assume _progress is a MutableStateFlow<Float> representing progress
@@ -57,7 +57,6 @@ class TimerViewModel : ViewModel() {
 data class SharedTime(@Volatile var time: Int)
 
 class CombinedTimerThread(
-    private val sharedTime: SharedTime,
     private val totalTimeMillis: Long = 10000, // 10 seconds in milliseconds
     private val onProgressUpdate: (Int, Float) -> Unit
 ) : Thread() {
@@ -72,7 +71,7 @@ class CombinedTimerThread(
                 onProgressUpdate(timeLeft, progress)
             }
         } catch (e: InterruptedException) {
-            Thread.currentThread().interrupt() // Preserve interruption status
+            currentThread().interrupt() // Preserve interruption status
         }
     }
 }

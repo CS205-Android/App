@@ -1,7 +1,6 @@
 package mobile.cs205
 
 import android.os.Bundle
-import android.text.Layout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -12,9 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import mobile.cs205.TimerViewModel
 import mobile.cs205.ui.theme.CS205Theme
-import java.lang.reflect.Modifier
 import androidx.compose.material3.LinearProgressIndicator
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +41,7 @@ fun TimerScreen(timerViewModel: TimerViewModel) {
             text = "Time left: $timeLeft seconds",
         )
         LinearProgressIndicator(
-            progress = progress,
+            progress = { progress },
         )
         // Start button
         Button(

@@ -237,6 +237,17 @@ val singlishQuestions = listOf(
         correctAnswer = "To rush or go all out")
 )
 
+val topicNames = listOf(
+    "Singapore History #1",
+    "Singapore History #2",
+    "Singapore History #3",
+    "Singapore History #4",
+    "Singapore Technological Advancements",
+    "Singlish",
+    "Singapore Laws",
+    "Singapore Politics"
+)
+
 
 val topics = listOf(
     Topic(topicName = "Singapore History #1",

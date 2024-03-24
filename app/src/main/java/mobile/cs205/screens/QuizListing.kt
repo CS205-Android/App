@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,6 +25,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mobile.cs205.composables.common.data.Topic
+import mobile.cs205.composables.common.data.topicNames
 import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.CS205Theme
 
@@ -51,7 +53,9 @@ fun QuizListingScreen() {
                 //Define the shape of the TextButton to rectangular instead of default rounded
                 shape = RectangleShape,
                 //Define the TextButton to fill the max width of Lazy Column - 8.dp
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
                 //Define the Text to be stored in the TextButton
                 Text(
@@ -86,20 +90,73 @@ fun QuizListingScreen() {
     }
     //When dialog state = true, set corresponding values based on AlertDialogExample Composable
     when {
+        //when openAlertDialog = true
         openAlertDialog.value -> {
-            AlertDialogExample(
+            //First, find the topic from the topics list
+            val topic = topics[topicNames.indexOf(selectedItem)]
+            //Create a new CustomAlertDialog with the following parameters
+            CustomAlertDialog(
+                //If dismiss request is called, openAlertDialog will be set to false
                 onDismissRequest = { openAlertDialog.value = false },
+                //If confirm request is called, openAlertDialog will be set to false
                 onConfirmation = {
+                    //TODO: Change method here to route to Quiz Screen
                     openAlertDialog.value = false
                     println("Confirmation registered for $selectedItem")
                 },
-                dialogTitle = "Alert dialog example",
-                dialogText = "You selected: $selectedItem",
-                icon = Icons.Default.Info
+                //Sets the icon used in the Dialog to the Quiz Icon
+                icon = Icons.Default.Quiz,
+                //Sets the topic used in the Dialog to the selected topic
+                topic = topic
             )
 
         }
     }
+}
+
+@Composable
+//Parameters for the CustomAlertDialog
+fun CustomAlertDialog( //Parameters for the CustomAlertDialog
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    icon: ImageVector,
+    topic : Topic
+) {
+    //Creates a AlertDialog object using the parameters
+    AlertDialog(
+        //Sets the icon of the AlertDialog
+        icon = {
+            Icon(icon, contentDescription = "Quiz Icon")
+        },
+        //Sets the title of the AlertDialog
+        title = {
+            Text(text = topic.topicName)
+        },
+        //Sets the text of the AlertDialog
+        text = {
+            Text(text = "${topic.description}\n\n" +
+                "No. of Questions: ${topic.questions.size}\n" +
+                "Duration of each question: 10 seconds")
+        },
+        //Sets the onDismissRequest of the AlertDialog
+        onDismissRequest = { onDismissRequest() },
+        //Sets the confirmButton settings of the AlertDialog
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirmation() }
+            ) {
+                Text("Start Quiz!")
+            }
+        },
+        //Sets the dismissButton settings of the AlertDialog
+        dismissButton = {
+            TextButton(
+                onClick = { onDismissRequest() }
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @Preview
@@ -108,46 +165,4 @@ fun QuizListingScreenPreview() {
     CS205Theme {
         QuizListingScreen()
     }
-}
-
-@Composable
-fun AlertDialogExample(
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-    icon: ImageVector,
-) {
-    AlertDialog(
-        icon = {
-            Icon(icon, contentDescription = "Example Icon")
-        },
-        title = {
-            Text(text = dialogTitle)
-        },
-        text = {
-            Text(text = dialogText)
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmation()
-                }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Dismiss")
-            }
-        }
-    )
 }

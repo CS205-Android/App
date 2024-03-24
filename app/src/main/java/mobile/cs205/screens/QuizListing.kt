@@ -1,5 +1,6 @@
 package mobile.cs205.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import mobile.cs205.composables.common.data.Topic
 import mobile.cs205.composables.common.data.topicNames
 import mobile.cs205.composables.common.data.topics
+import mobile.cs205.services.NotificationService
 import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
@@ -37,6 +40,8 @@ fun QuizListingScreen() {
     val openAlertDialog = remember { mutableStateOf(false) }
     val (selectedItem, setSelectedItem) = remember { mutableStateOf("") }
 
+    //Set Context for notification
+    val notificationService = NotificationService(LocalContext.current)
     //Lazy Column is used to set a ListView of all topics
     LazyColumn {
         //items loops through all topics stated in Topic.kt
@@ -100,9 +105,12 @@ fun QuizListingScreen() {
                 onDismissRequest = { openAlertDialog.value = false },
                 //If confirm request is called, openAlertDialog will be set to false
                 onConfirmation = {
+                    //Sets the openAlertDialog to false to close the AlertDialog
                     openAlertDialog.value = false
-                    println("Confirmation registered for $selectedItem")
-                    //TODO: Send notification to user that the Quiz has been started
+                    //Sends a notification to the user
+                    notificationService.showNotification(
+                        contentTitle = "Quiz has started!",
+                        contentText = "You have started $selectedItem quiz!")
                     //TODO: Change method here to route to Quiz Screen
                 },
                 //Sets the icon used in the Dialog to the Quiz Icon

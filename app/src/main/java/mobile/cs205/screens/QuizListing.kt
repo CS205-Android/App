@@ -24,30 +24,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.CS205Theme
-
-data class Topic(val topicName : String, val description : String)
 
 @Composable
 fun QuizListingScreen() {
-    val topics = listOf(
-        Topic("Singapore History #1",
-            "This quiz covers the British colonization portion of Singapore’s History!"),
-        Topic("Singapore History #2",
-            "This quiz covers the early period of Singapore’s History!"),
-        Topic("Singapore History #3",
-            "This quiz covers the early modern history of Singapore’s History!"),
-        Topic("Singapore History #4",
-            "This quiz covers the World War II period  of Singapore’s History!"),
-        Topic("Singapore History #5",
-            "This quiz covers the independence of Singapore Agreement 1965!"),
-        Topic("Singapore Laws",
-            "Did you know about some laws that are unique to Singapore?"),
-        Topic("Singlish",
-            "Lar lor leh meh, do you know all the Singlish slangs? Find out in this quiz!"),
-        Topic("Singapore Politics",
-            "How much did you know about politics in Singapore? Guess we are about to find out now!")
-    )
 
     //State to keep track of which person is opened and when its opened. Will change with actual quiz
     val openAlertDialog = remember { mutableStateOf(false) }

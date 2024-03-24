@@ -100,9 +100,10 @@ fun QuizListingScreen() {
                 onDismissRequest = { openAlertDialog.value = false },
                 //If confirm request is called, openAlertDialog will be set to false
                 onConfirmation = {
-                    //TODO: Change method here to route to Quiz Screen
                     openAlertDialog.value = false
                     println("Confirmation registered for $selectedItem")
+                    //TODO: Send notification to user that the Quiz has been started
+                    //TODO: Change method here to route to Quiz Screen
                 },
                 //Sets the icon used in the Dialog to the Quiz Icon
                 icon = Icons.Default.Quiz,

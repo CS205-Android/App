@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -34,33 +35,52 @@ fun QuizListingScreen() {
     val openAlertDialog = remember { mutableStateOf(false) }
     val (selectedItem, setSelectedItem) = remember { mutableStateOf("") }
 
+    //Lazy Column is used to set a ListView of all topics
     LazyColumn {
+        //items loops through all topics stated in Topic.kt
         items(topics) { topic ->
+            //Create a Text button for each topic
             TextButton(
+                //Define the action of the button when the button is clicked
                 onClick = {
                     //Sets state to name of selected item and AlertDialog to true
                     setSelectedItem(topic.topicName)
+                    //Sets the openAlertDialog.value to true which will run the when block below
                     openAlertDialog.value = true
                 },
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                //Define the shape of the TextButton to rectangular instead of default rounded
+                shape = RectangleShape,
+                //Define the TextButton to fill the max width of Lazy Column - 8.dp
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
             ) {
+                //Define the Text to be stored in the TextButton
                 Text(
+                    //Assign the text to be an annotated string of 2 parts
                     text = buildAnnotatedString {
+                        //Part 1: Topic Name to be bold and larger than standard font
                         withStyle(
                             style = SpanStyle(
+                                //Sets the topic name to bold
                                 fontWeight = FontWeight.Bold,
+                                //Sets the font size to 16.sp
                                 fontSize = 16.sp
                             )
                         ) {
+                            //Set the style to the topic name
                             append(topic.topicName)
                         }
+                        //Appends a 1-line space between topic name and description
                         append("\n\n")
+                        //Part 2: Description of standard font
                         append(topic.description)
                     },
+                    //Aligns the text to the left
                     textAlign = TextAlign.Start,
+                    //Sets the textbox to fill the max width of the button
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+            //Include a Horizontal divider line between each button
             HorizontalDivider()
         }
     }

@@ -27,6 +27,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import mobile.cs205.composables.common.data.Topic
 import mobile.cs205.composables.common.data.topicNames
 import mobile.cs205.composables.common.data.topics
@@ -34,12 +35,11 @@ import mobile.cs205.services.NotificationService
 import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
-fun QuizListingScreen() {
+fun QuizListingScreen(rootNavController: NavHostController) {
 
     //State to keep track of which person is opened and when its opened. Will change with actual quiz
     val openAlertDialog = remember { mutableStateOf(false) }
     val (selectedItem, setSelectedItem) = remember { mutableStateOf("") }
-
     //Set Context for notification
     val notificationService = NotificationService(LocalContext.current)
     //Lazy Column is used to set a ListView of all topics
@@ -110,8 +110,15 @@ fun QuizListingScreen() {
                     //Sends a notification to the user
                     notificationService.showNotification(
                         contentTitle = "Quiz has started!",
-                        contentText = "You have started $selectedItem quiz!")
+                        contentText = "You have started $selectedItem quiz!"
+                    )
+                    rootNavController.navigate("quiz_question/${topicNames.indexOf(selectedItem)}") {
+                        popUpTo("quiz_listing") { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = false
+                    }
                     //TODO: Change method here to route to Quiz Screen
+
                 },
                 //Sets the icon used in the Dialog to the Quiz Icon
                 icon = Icons.Default.Quiz,
@@ -122,6 +129,7 @@ fun QuizListingScreen() {
         }
     }
 }
+
 
 @Composable
 //Parameters for the CustomAlertDialog
@@ -168,10 +176,10 @@ fun CustomAlertDialog( //Parameters for the CustomAlertDialog
     )
 }
 
-@Preview
-@Composable
-fun QuizListingScreenPreview() {
-    CS205Theme {
-        QuizListingScreen()
-    }
-}
+//@Preview
+//@Composable
+//fun QuizListingScreenPreview() {
+//    CS205Theme {
+//        QuizListingScreen()
+//    }
+//}

@@ -7,13 +7,14 @@ import androidx.navigation.compose.composable
 import mobile.cs205.screens.HomeScreen
 import mobile.cs205.screens.QuestionScreen
 import mobile.cs205.screens.QuizListingScreen
+import mobile.cs205.screens.QuizQuestionScreen
 import mobile.cs205.screens.ScaffoldScreen
 import mobile.cs205.screens.SettingsScreen
 
 @Composable
 fun MainNavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Scaffold.route ){
-        composable(route = Screen.Question.route){ QuestionScreen() }
+        composable(route = Screen.QuizQuestion.route + "/{quizId}") {QuizQuestionScreen(navController)}
         composable(route = Screen.Scaffold.route) { ScaffoldScreen(navController) }
     }
 }
@@ -22,7 +23,7 @@ fun MainNavGraph(navController: NavHostController) {
 fun FragmentNavGraph(navController: NavHostController, rootNavController: NavHostController){
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) { HomeScreen(rootNavController) }
-        composable(route = Screen.QuizListing.route) { QuizListingScreen() }
+        composable(route = Screen.QuizListing.route) { QuizListingScreen(rootNavController) }
         composable(route = Screen.Settings.route) { SettingsScreen()}
     }
 }

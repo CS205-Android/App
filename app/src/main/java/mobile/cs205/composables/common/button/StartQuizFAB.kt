@@ -11,14 +11,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import mobile.cs205.Screen
+import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
 fun StartQuizFAB(navController: NavHostController) {
+//    Randomly pick one topic to start quiz
+    val random = topics.indices.random()
+
     ExtendedFloatingActionButton(
-        containerColor   = MaterialTheme.colorScheme.tertiary,
+        containerColor = MaterialTheme.colorScheme.tertiary,
         contentColor = MaterialTheme.colorScheme.onTertiary,
-        onClick = { navController.navigate(Screen.Question.route) },
+        onClick = { navController.navigate("${Screen.QuizQuestion.route}/$random") },
         icon = {
             Icon(
                 Icons.Outlined.PlayArrow,

@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,8 +39,6 @@ import mobile.cs205.composables.common.data.Question
 import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.md_theme_dark_errorContainer
 import mobile.cs205.TimerViewModel
-import mobile.cs205.CombinedTimerThread
-import mobile.cs205.SharedTime
 
 @Composable
 fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewModel = viewModel()) {
@@ -58,6 +55,24 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     val arguments = navBackStackEntry?.arguments
     val quizId : Int? = arguments?.getString("quizId")?.toInt()
     var size by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(key1 = isTimerRunning, key2 = timeLeft) {
+        if (!isTimerRunning && timeLeft <= 0) {
+
+            delay(2000) // Give some time to show the correct answer
+
+            // Check if there are more questions
+            if (currentQuestionIndex < size - 1) {
+                // Move to next question
+                currentQuestionIndex++
+                currentQuestionNumber++
+                timerViewModel.startTimer() // Start the timer for the next question
+            } else {
+                // Handle the end of the quiz
+                showDialog = true
+            }
+        }
+    }
 
     LaunchedEffect(currentQuestionIndex) {
         timerViewModel.startTimer()
@@ -240,8 +255,6 @@ fun OptionList(
     onIncrementCorrectNumber: () -> Unit,
     timerViewModel: TimerViewModel // Accept TimerViewModel here
 ) {
-    val qnAnswer = question.correctAnswer
-
     Column (
         modifier = Modifier
             .fillMaxSize(),
@@ -273,29 +286,10 @@ fun OptionList(
     }
 }
 
-//@Composable
-//fun Timer(
-//    time : String
-//) {
-//    Text("$time s")
-//}
-
 @Composable
 fun Timer(timeLeft: Int) {
     Text("$timeLeft s")
 }
-
-//@Composable
-//fun ProgressBar(
-//    percent: Float
-//) {
-//    val progress = remember { mutableFloatStateOf(percent.coerceIn(0f, 100f)) }
-//
-//    LinearProgressIndicator(
-//        modifier = Modifier.padding(top = 50.dp),
-//        progress = { progress.floatValue / 100f },
-//    )
-//}
 
 @Composable
 fun ProgressBar(progress: Float) {

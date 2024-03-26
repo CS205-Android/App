@@ -1,13 +1,36 @@
 package mobile.cs205.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import mobile.cs205.ui.theme.CS205Theme
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.Switch
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsScreen() {
-    Text(text = "Settings Screen")
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(horizontal = 25.dp)
+            .padding(top = 5.dp)
+            .fillMaxWidth()
+
+    ) {
+        Text(text = "Hard Mode (5s per question)")
+        DifficultySwitch()
+    }
 }
 
 @Preview
@@ -16,4 +39,15 @@ fun SettingsScreenPreview() {
     CS205Theme {
         SettingsScreen()
     }
+}
+
+@Composable
+fun DifficultySwitch() {
+    var checked by remember { mutableStateOf(true) }
+    Switch(
+        checked = checked,
+        onCheckedChange = {
+            checked = it
+        }
+    )
 }

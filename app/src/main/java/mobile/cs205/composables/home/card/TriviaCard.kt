@@ -18,10 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import mobile.cs205.data.remote.HistoryService
+import mobile.cs205.data.remote.SingaporeImageListing
 import mobile.cs205.data.remote.data.HistoryResponse
 import mobile.cs205.ui.theme.CS205Theme
 
@@ -41,6 +44,9 @@ fun TriviaCard() {
         val data = service.getHistory()
         value = data[data.indices.random()]
     }
+    val image = produceState(initialValue = "") {
+        value = SingaporeImageListing[SingaporeImageListing.indices.random()]
+    }
 
     ElevatedCard(
         modifier = androidx.compose.ui.Modifier
@@ -48,12 +54,21 @@ fun TriviaCard() {
             .height(IntrinsicSize.Min)
             .wrapContentHeight()
     ) {
-//            This part will be the image
         Box(modifier = with(Modifier) {
             fillMaxWidth()
                 .height(screenWidth / 1.8f)
                 .background(Color.Blue)
-        })
+        }) {
+            AsyncImage(
+                contentScale = ContentScale.FillBounds,
+                modifier = with(Modifier) {
+                    fillMaxWidth()
+                        .height(screenWidth / 1.8f)
+                },
+                model = image.value,
+                contentDescription = "Singapore"
+            )
+        }
 
         Column(modifier = Modifier.padding(24.dp)) {
             Text(text = "Do You know?", style = MaterialTheme.typography.bodyLarge)

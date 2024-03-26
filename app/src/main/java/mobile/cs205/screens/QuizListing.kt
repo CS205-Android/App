@@ -1,6 +1,5 @@
 package mobile.cs205.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,7 +23,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -32,7 +30,6 @@ import mobile.cs205.composables.common.data.Topic
 import mobile.cs205.composables.common.data.topicNames
 import mobile.cs205.composables.common.data.topics
 import mobile.cs205.services.NotificationService
-import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
 fun QuizListingScreen(rootNavController: NavHostController) {
@@ -40,6 +37,7 @@ fun QuizListingScreen(rootNavController: NavHostController) {
     //State to keep track of which person is opened and when its opened. Will change with actual quiz
     val openAlertDialog = remember { mutableStateOf(false) }
     val (selectedItem, setSelectedItem) = remember { mutableStateOf("") }
+
     //Set Context for notification
     val notificationService = NotificationService(LocalContext.current)
     //Lazy Column is used to set a ListView of all topics
@@ -129,7 +127,6 @@ fun QuizListingScreen(rootNavController: NavHostController) {
         }
     }
 }
-
 
 @Composable
 //Parameters for the CustomAlertDialog

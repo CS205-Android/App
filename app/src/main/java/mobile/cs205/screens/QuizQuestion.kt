@@ -71,7 +71,9 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
 
     LaunchedEffect(quizId, currentQuestionNumber) {
         if (quizId != null && currentQuestionNumber > size) {
-                showDialog = true
+            showDialog = true
+            timerViewModel.resetTimer()
+            timerViewModel.stopTimer()
         }
     }
 
@@ -132,7 +134,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
 //                        shape = RoundedCornerShape(8.dp) // Optional: apply rounded corners
 //                    ),
 
-                ) {
+            ) {
                 val question = if (quizId != null && quizId in topics.indices && currentQuestionIndex in topics[quizId].questions.indices) {
                     topics[quizId].questions[currentQuestionIndex]
                 } else {
@@ -157,7 +159,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                ) {
+            ) {
                 Column (
                     modifier = Modifier
                         .fillMaxWidth(),

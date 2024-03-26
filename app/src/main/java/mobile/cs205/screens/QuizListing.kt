@@ -27,6 +27,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import mobile.cs205.composables.common.data.Topic
 import mobile.cs205.composables.common.data.topicNames
 import mobile.cs205.composables.common.data.topics
@@ -34,7 +35,7 @@ import mobile.cs205.services.NotificationService
 import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
-fun QuizListingScreen() {
+fun QuizListingScreen(rootNavController: NavHostController) {
 
     //State to keep track of which person is opened and when its opened. Will change with actual quiz
     val openAlertDialog = remember { mutableStateOf(false) }
@@ -110,8 +111,15 @@ fun QuizListingScreen() {
                     //Sends a notification to the user
                     notificationService.showNotification(
                         contentTitle = "Quiz has started!",
-                        contentText = "You have started $selectedItem quiz!")
+                        contentText = "You have started $selectedItem quiz!"
+                    )
+                    rootNavController.navigate("quiz_question/${topicNames.indexOf(selectedItem)}") {
+                        popUpTo("quiz_listing") { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = false
+                    }
                     //TODO: Change method here to route to Quiz Screen
+
                 },
                 //Sets the icon used in the Dialog to the Quiz Icon
                 icon = Icons.Default.Quiz,
@@ -168,10 +176,56 @@ fun CustomAlertDialog( //Parameters for the CustomAlertDialog
     )
 }
 
-@Preview
+
 @Composable
-fun QuizListingScreenPreview() {
-    CS205Theme {
-        QuizListingScreen()
-    }
+//Parameters for the CustomAlertDialog
+fun CustomAlertDialog( //Parameters for the CustomAlertDialog
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    icon: ImageVector,
+    topic : Topic
+) {
+    //Creates a AlertDialog object using the parameters
+    AlertDialog(
+        //Sets the icon of the AlertDialog
+        icon = {
+            Icon(icon, contentDescription = "Quiz Icon")
+        },
+        //Sets the title of the AlertDialog
+        title = {
+            Text(text = topic.topicName)
+        },
+        //Sets the text of the AlertDialog
+        text = {
+            Text(text = "${topic.description}\n\n" +
+                "No. of Questions: ${topic.questions.size}\n" +
+                "Duration of each question: 10 seconds")
+        },
+        //Sets the onDismissRequest of the AlertDialog
+        onDismissRequest = { onDismissRequest() },
+        //Sets the confirmButton settings of the AlertDialog
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirmation() }
+            ) {
+                Text("Start Quiz!")
+            }
+        },
+        //Sets the dismissButton settings of the AlertDialog
+        dismissButton = {
+            TextButton(
+                onClick = { onDismissRequest() }
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
 }
+
+//@Preview
+//@Composable
+//fun QuizListingScreenPreview() {
+//    CS205Theme {
+//        QuizListingScreen()
+//    }
+//}

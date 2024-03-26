@@ -6,4 +6,5 @@ sealed class Screen(val route: String) {
     data object Question : Screen("question")
     data object Settings : Screen("setting")
     data object Scaffold : Screen("scaffold")
+    data object QuizQuestion: Screen("quiz_question")
 }

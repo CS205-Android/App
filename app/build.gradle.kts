@@ -78,6 +78,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("io.coil-kt:coil:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
 
 }

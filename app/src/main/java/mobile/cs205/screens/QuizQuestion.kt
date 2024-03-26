@@ -17,6 +17,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -29,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.GlobalScope
@@ -37,18 +39,30 @@ import kotlinx.coroutines.launch
 import mobile.cs205.composables.common.data.Question
 import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.md_theme_dark_errorContainer
+import mobile.cs205.TimerViewModel
+import mobile.cs205.CombinedTimerThread
+import mobile.cs205.SharedTime
 
 @Composable
-fun QuizQuestionScreen(navController: NavController) {
+fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewModel = viewModel()) {
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var currentQuestionNumber by remember { mutableIntStateOf(1) }
     var correctAnswerNumber by remember { mutableIntStateOf(0) }
     var showDialog by remember { mutableStateOf(false) }
 
+    val timeLeft by timerViewModel.sharedTime.collectAsState()
+    val isTimerRunning by timerViewModel.isTimerRunning.collectAsState()
+    val progress by timerViewModel.progress.collectAsState()
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val arguments = navBackStackEntry?.arguments
     val quizId : Int? = arguments?.getString("quizId")?.toInt()
     var size by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(currentQuestionIndex) {
+        timerViewModel.startTimer()
+    }
+
     LaunchedEffect(quizId) {
         if (quizId != null) {
             size = topics.getOrNull(quizId)?.questions?.size ?: 0
@@ -101,8 +115,8 @@ fun QuizQuestionScreen(navController: NavController) {
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Timer(time = "20")
-                    ProgressBar(percent = 10f)
+                    Timer(timeLeft = timeLeft)
+                    ProgressBar(progress = progress)
                 }
             }
             //MIDDLE PORTION
@@ -133,7 +147,8 @@ fun QuizQuestionScreen(navController: NavController) {
                         },
                         onIncrementCorrectNumber = {
                             correctAnswerNumber++
-                        }
+                        },
+                        timerViewModel = timerViewModel
                     )
                 }
             }
@@ -164,6 +179,7 @@ fun OptionsCard (
     correctAns:String,
     onIncrementIndex: () -> Unit,
     onIncrementCorrectNumber: () -> Unit,
+    timerViewModel: TimerViewModel // Add this parameter
 ) {
     var correct by remember { mutableStateOf(false) }
     var wrong by remember { mutableStateOf(false) }
@@ -188,6 +204,7 @@ fun OptionsCard (
         onClick = {
             if (option == correctAns) {
                 correct = true
+                timerViewModel.stopTimer()
 
                 GlobalScope.launch {
                     delay(800) // Adjust the delay duration as needed
@@ -198,6 +215,7 @@ fun OptionsCard (
 
             } else {
                 wrong= true
+                timerViewModel.stopTimer()
 
                 GlobalScope.launch {
                     delay(800) // Adjust the delay duration as needed
@@ -217,7 +235,9 @@ fun OptionsCard (
 fun OptionList(
     question: Question,
     onIncrementIndex: () -> Unit,
-    onIncrementCorrectNumber: () -> Unit) {
+    onIncrementCorrectNumber: () -> Unit,
+    timerViewModel: TimerViewModel // Accept TimerViewModel here
+) {
     val qnAnswer = question.correctAnswer
 
     Column (
@@ -235,28 +255,51 @@ fun OptionList(
                 .padding(top = 10.dp),
         )
         Column {
-            for (i in question.answerOptions) {
-                OptionsCard(option = i, correctAns = qnAnswer, onIncrementIndex, onIncrementCorrectNumber)
+//            for (i in question.answerOptions) {
+//                OptionsCard(option = i, correctAns = qnAnswer, onIncrementIndex, onIncrementCorrectNumber)
+//            }
+            question.answerOptions.forEach { option ->
+                OptionsCard(
+                    option = option,
+                    correctAns = question.correctAnswer,
+                    onIncrementIndex = onIncrementIndex,
+                    onIncrementCorrectNumber = onIncrementCorrectNumber,
+                    timerViewModel = timerViewModel // Pass it down here
+                )
             }
         }
     }
 }
 
+//@Composable
+//fun Timer(
+//    time : String
+//) {
+//    Text("$time s")
+//}
+
 @Composable
-fun Timer(
-    time : String
-) {
-    Text("$time s")
+fun Timer(timeLeft: Int) {
+    Text("$timeLeft s")
 }
 
-@Composable
-fun ProgressBar(
-    percent: Float
-) {
-    val progress = remember { mutableFloatStateOf(percent.coerceIn(0f, 100f)) }
+//@Composable
+//fun ProgressBar(
+//    percent: Float
+//) {
+//    val progress = remember { mutableFloatStateOf(percent.coerceIn(0f, 100f)) }
+//
+//    LinearProgressIndicator(
+//        modifier = Modifier.padding(top = 50.dp),
+//        progress = { progress.floatValue / 100f },
+//    )
+//}
 
+@Composable
+fun ProgressBar(progress: Float) {
     LinearProgressIndicator(
         modifier = Modifier.padding(top = 50.dp),
-        progress = { progress.floatValue / 100f },
+        progress = progress
     )
 }
+

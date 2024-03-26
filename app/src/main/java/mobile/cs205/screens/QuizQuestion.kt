@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -190,6 +191,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun OptionsCard (
     option: String,
@@ -294,8 +296,10 @@ fun Timer(timeLeft: Int) {
 @Composable
 fun ProgressBar(progress: Float) {
     LinearProgressIndicator(
+        progress = {
+            progress
+        },
         modifier = Modifier.padding(top = 50.dp),
-        progress = progress
     )
 }
 

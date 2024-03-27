@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -32,7 +31,6 @@ import coil.request.ImageRequest
 import mobile.cs205.data.remote.HistoryService
 import mobile.cs205.data.remote.SingaporeImageListing
 import mobile.cs205.data.remote.data.HistoryResponse
-import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
 fun TriviaCard() {
@@ -100,13 +98,5 @@ fun TriviaCard() {
             )
         }
 
-    }
-}
-
-@Composable
-@Preview
-fun TriviaCardPreview() {
-    CS205Theme {
-        TriviaCard()
     }
 }

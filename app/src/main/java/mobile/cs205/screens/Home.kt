@@ -5,24 +5,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
-import mobile.cs205.composables.common.navigation.BottomBar
-import mobile.cs205.composables.common.navigation.TopBar
 import mobile.cs205.composables.home.canvas.HomeCanvas
 import mobile.cs205.composables.home.card.TriviaCard
-import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
 fun HomeScreen() {
@@ -48,25 +40,4 @@ fun HomeScreen() {
     }
 
 
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_5)
-@Composable
-fun HomeScreenPreview() {
-    CS205Theme {
-        val navController = rememberNavController()
-        Scaffold(
-            topBar = { TopBar("Hist-O-SG") },
-            bottomBar = {
-                BottomBar(navController = navController) {
-                }
-            }
-
-        ) { innerPadding ->
-            Column(modifier = Modifier.padding(innerPadding)) {
-                HomeScreen()
-            }
-
-        }
-    }
 }

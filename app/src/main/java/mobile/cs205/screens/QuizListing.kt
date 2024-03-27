@@ -33,7 +33,6 @@ fun QuizListingScreen(rootNavController: NavHostController) {
                 ListItem(
                     headlineContent = { Text(text = topicName) },
                     supportingContent = { Text(text = description) },
-
                     )
             }
             HorizontalDivider()

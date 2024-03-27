@@ -14,11 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import mobile.cs205.R
-import mobile.cs205.ui.theme.CS205Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,12 +36,4 @@ fun TopBar(title: String = "Hist-O-SG") {
         }
     )
 
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_5)
-@Composable
-fun TopBarPreview() {
-    CS205Theme {
-        TopBar()
-    }
 }

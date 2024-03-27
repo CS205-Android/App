@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import mobile.cs205.data.quiz.Topic
 import mobile.cs205.data.quiz.topicNames
-import mobile.cs205.services.NotificationService
+import mobile.cs205.services.NotificationServiceImpl
 
 @Composable
 fun StartQuizDialog(
@@ -21,7 +21,7 @@ fun StartQuizDialog(
     selectedItem: String,
     topic: Topic
 ) {
-    val notificationService = NotificationService(LocalContext.current)
+    val notificationService = NotificationServiceImpl(LocalContext.current)
 
     AlertDialog(
         icon = { Icon(Icons.Default.Quiz, contentDescription = "Quiz Icon") },

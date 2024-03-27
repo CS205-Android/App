@@ -20,7 +20,7 @@ class TimerViewModel : ViewModel() {
 
     fun startTimer() {
         if (timerThread == null || !timerThread!!.isAlive) {
-            SharedTime(initialTime)
+            _sharedTime.value = initialTime
             timerThread = CombinedTimerThread(10000) { timeLeft, progress ->
                 viewModelScope.launch {
                     _sharedTime.value = timeLeft

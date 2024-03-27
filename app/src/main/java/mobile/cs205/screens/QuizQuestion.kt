@@ -1,4 +1,8 @@
 package mobile.cs205.screens
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.view.WindowManager
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -16,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,6 +46,27 @@ import mobile.cs205.composables.common.data.Question
 import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.md_theme_dark_errorContainer
 import mobile.cs205.TimerViewModel
+
+@Composable
+fun KeepScreenOn() {
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val window = context.findActivity()?.window
+        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        onDispose {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+}
+
+fun Context.findActivity(): Activity? {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    return null
+}
 
 @Composable
 fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewModel = viewModel()) {
@@ -57,6 +84,8 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     val arguments = navBackStackEntry?.arguments
     val quizId : Int? = arguments?.getString("quizId")?.toInt()
     var size by remember { mutableIntStateOf(0) }
+
+    KeepScreenOn()
 
     LaunchedEffect(key1 = isTimerRunning, key2 = timeLeft) {
         if (!isTimerRunning && timeLeft <= 0) {
@@ -144,14 +173,6 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.9f)
-//                    .border( // Add border
-//                        BorderStroke(
-//                            2.dp,
-//                            Color.Black
-//                        ), // Border stroke with color and width
-//                        shape = RoundedCornerShape(8.dp) // Optional: apply rounded corners
-//                    ),
-
             ) {
                 val question = if (quizId != null && quizId in topics.indices && currentQuestionIndex in topics[quizId].questions.indices) {
                     topics[quizId].questions[currentQuestionIndex]
@@ -193,64 +214,6 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
         }
     }
 }
-//@OptIn(DelicateCoroutinesApi::class)
-//@Composable
-//fun OptionsCard (
-//    option: String,
-//    correctAns:String,
-//    onIncrementIndex: () -> Unit,
-//    onIncrementCorrectNumber: () -> Unit,
-//    timerViewModel: TimerViewModel // Add this parameter
-//) {
-//    var correct by remember { mutableStateOf(false) }
-//    var wrong by remember { mutableStateOf(false) }
-//
-//
-//    val colors = ButtonDefaults.buttonColors(
-//        containerColor = if (correct) {
-//            Color.Green
-//        } else if (wrong) {
-//            md_theme_dark_errorContainer
-//        } else {
-//            Color.DarkGray
-//        }
-//    )
-//
-//    Button(
-//        modifier = Modifier
-//            .padding(all = 8.dp)
-//            .width(260.dp)
-//            .height(45.dp),
-//        shape = RoundedCornerShape(12.dp),
-//        onClick = {
-//            if (option == correctAns) {
-//                correct = true
-//                timerViewModel.stopTimer()
-//
-//                GlobalScope.launch {
-//                    delay(800) // Adjust the delay duration as needed
-//                    correct = false
-//                    onIncrementIndex()
-//                    onIncrementCorrectNumber()
-//                }
-//
-//            } else {
-//                wrong= true
-//                timerViewModel.stopTimer()
-//
-//                GlobalScope.launch {
-//                    delay(800) // Adjust the delay duration as needed
-//                    wrong = false
-//                    onIncrementIndex()
-//                }
-//
-//            }
-//        },
-//        colors = colors
-//    ) {
-//        Text(option)
-//    }
-//}
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
@@ -309,45 +272,6 @@ fun OptionsCard(
         Text(option)
     }
 }
-
-//@Composable
-//fun OptionList(
-//    question: Question,
-//    onIncrementIndex: () -> Unit,
-//    onIncrementCorrectNumber: () -> Unit,
-//    timerViewModel: TimerViewModel // Accept TimerViewModel here
-//) {
-//    Column (
-//        modifier = Modifier
-//            .fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(
-//            text = question.question,
-//            style = TextStyle(
-//                textAlign = TextAlign.Center,
-//            ),
-//            modifier = Modifier
-//                .fillMaxHeight(0.3f)
-//                .padding(top = 10.dp),
-//        )
-//        Column {
-////            for (i in question.answerOptions) {
-////                OptionsCard(option = i, correctAns = qnAnswer, onIncrementIndex, onIncrementCorrectNumber)
-////            }
-//            question.answerOptions.forEach { option ->
-//                OptionsCard(
-//                    option = option,
-//                    correctAns = question.correctAnswer,
-//                    onIncrementIndex = onIncrementIndex,
-//                    onIncrementCorrectNumber = onIncrementCorrectNumber,
-//                    timerViewModel = timerViewModel // Pass it down here
-//                )
-//            }
-//        }
-//    }
-//}
-
 @Composable
 fun OptionList(
     question: Question,

@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,8 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mobile.cs205.composables.common.data.Question
@@ -215,7 +214,6 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     }
 }
 
-@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun OptionsCard(
     option: String,
@@ -237,6 +235,8 @@ fun OptionsCard(
         else -> Color.LightGray // Default color for unselected or incorrect but not selected options
     }
 
+    val coroutineScope = rememberCoroutineScope()
+
     Button(
         onClick = {
             if (!showCorrectAnswer && !correct && !wrong) { // Allow interaction only if not currently showing correct answer or previously interacted
@@ -250,7 +250,7 @@ fun OptionsCard(
                 optionSelected = true // Mark that an option has been selected
                 timerViewModel.stopTimer() // Stop the timer regardless of whether the answer was correct or wrong
 
-                GlobalScope.launch {
+                coroutineScope.launch {
                     delay(800) // Delay for 0.8 seconds after option selected
                     isSelected = false // Reset selection state
                     correct = false // Reset correct state

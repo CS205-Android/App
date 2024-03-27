@@ -1,4 +1,5 @@
 package mobile.cs205.screens
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -47,6 +48,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     var currentQuestionNumber by remember { mutableIntStateOf(1) }
     var correctAnswerNumber by remember { mutableIntStateOf(0) }
     var showDialog by remember { mutableStateOf(false) }
+    var showCorrectAnswer by remember { mutableStateOf(false) }
 
     val timeLeft by timerViewModel.sharedTime.collectAsState()
     val isTimerRunning by timerViewModel.isTimerRunning.collectAsState()
@@ -60,7 +62,9 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     LaunchedEffect(key1 = isTimerRunning, key2 = timeLeft) {
         if (!isTimerRunning && timeLeft <= 0) {
 
+            showCorrectAnswer = true
             delay(2000) // Give some time to show the correct answer
+            showCorrectAnswer = false
 
             // Check if there are more questions
             if (currentQuestionIndex < size - 1) {
@@ -92,7 +96,6 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
             timerViewModel.stopTimer()
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -166,6 +169,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                         onIncrementCorrectNumber = {
                             correctAnswerNumber++
                         },
+                        showCorrectAnswer = showCorrectAnswer,
                         timerViewModel = timerViewModel
                     )
                 }
@@ -190,103 +194,194 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
         }
     }
 }
+//@OptIn(DelicateCoroutinesApi::class)
+//@Composable
+//fun OptionsCard (
+//    option: String,
+//    correctAns:String,
+//    onIncrementIndex: () -> Unit,
+//    onIncrementCorrectNumber: () -> Unit,
+//    timerViewModel: TimerViewModel // Add this parameter
+//) {
+//    var correct by remember { mutableStateOf(false) }
+//    var wrong by remember { mutableStateOf(false) }
+//
+//
+//    val colors = ButtonDefaults.buttonColors(
+//        containerColor = if (correct) {
+//            Color.Green
+//        } else if (wrong) {
+//            md_theme_dark_errorContainer
+//        } else {
+//            Color.DarkGray
+//        }
+//    )
+//
+//    Button(
+//        modifier = Modifier
+//            .padding(all = 8.dp)
+//            .width(260.dp)
+//            .height(45.dp),
+//        shape = RoundedCornerShape(12.dp),
+//        onClick = {
+//            if (option == correctAns) {
+//                correct = true
+//                timerViewModel.stopTimer()
+//
+//                GlobalScope.launch {
+//                    delay(800) // Adjust the delay duration as needed
+//                    correct = false
+//                    onIncrementIndex()
+//                    onIncrementCorrectNumber()
+//                }
+//
+//            } else {
+//                wrong= true
+//                timerViewModel.stopTimer()
+//
+//                GlobalScope.launch {
+//                    delay(800) // Adjust the delay duration as needed
+//                    wrong = false
+//                    onIncrementIndex()
+//                }
+//
+//            }
+//        },
+//        colors = colors
+//    ) {
+//        Text(option)
+//    }
+//}
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun OptionsCard (
+fun OptionsCard(
     option: String,
-    correctAns:String,
+    correctAns: String,
+    showCorrectAnswer: Boolean,
     onIncrementIndex: () -> Unit,
     onIncrementCorrectNumber: () -> Unit,
-    timerViewModel: TimerViewModel // Add this parameter
+    timerViewModel: TimerViewModel
 ) {
+    var isSelected by remember { mutableStateOf(false) }
     var correct by remember { mutableStateOf(false) }
     var wrong by remember { mutableStateOf(false) }
+    var optionSelected by remember { mutableStateOf(false) } // Track if an option has been selected
 
-
-    val colors = ButtonDefaults.buttonColors(
-        containerColor = if (correct) {
-            Color.Green
-        } else if (wrong) {
-            md_theme_dark_errorContainer
-        } else {
-            Color.DarkGray
-        }
-    )
+    // Determine the button's background color based on state
+    val backgroundColor = when {
+        correct || (showCorrectAnswer && option == correctAns) -> Color.Green // Highlight correct answer
+        wrong -> md_theme_dark_errorContainer // Incorrect option selected
+        else -> Color.LightGray // Default color for unselected or incorrect but not selected options
+    }
 
     Button(
-        modifier = Modifier
-            .padding(all = 8.dp)
-            .width(260.dp)
-            .height(45.dp),
-        shape = RoundedCornerShape(12.dp),
         onClick = {
-            if (option == correctAns) {
-                correct = true
-                timerViewModel.stopTimer()
-
-                GlobalScope.launch {
-                    delay(800) // Adjust the delay duration as needed
-                    correct = false
-                    onIncrementIndex()
+            if (!showCorrectAnswer && !correct && !wrong) { // Allow interaction only if not currently showing correct answer or previously interacted
+                isSelected = true
+                if (option == correctAns) {
+                    correct = true
                     onIncrementCorrectNumber()
+                } else {
+                    wrong = true
                 }
-
-            } else {
-                wrong= true
-                timerViewModel.stopTimer()
+                optionSelected = true // Mark that an option has been selected
+                timerViewModel.stopTimer() // Stop the timer regardless of whether the answer was correct or wrong
 
                 GlobalScope.launch {
-                    delay(800) // Adjust the delay duration as needed
-                    wrong = false
-                    onIncrementIndex()
+                    delay(800) // Delay for 0.8 seconds after option selected
+                    isSelected = false // Reset selection state
+                    correct = false // Reset correct state
+                    wrong = false // Reset wrong state
+                    if (optionSelected) { // Only trigger question switch if an option has been selected
+                        onIncrementIndex() // Move to the next question after the delay
+                    }
+                    optionSelected = false // Reset optionSelected flag
                 }
-
             }
         },
-        colors = colors
+        colors = ButtonDefaults.buttonColors(containerColor = backgroundColor),
+        modifier = Modifier
+            .padding(8.dp)
+            .width(260.dp)
+            .height(45.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Text(option)
     }
 }
 
+//@Composable
+//fun OptionList(
+//    question: Question,
+//    onIncrementIndex: () -> Unit,
+//    onIncrementCorrectNumber: () -> Unit,
+//    timerViewModel: TimerViewModel // Accept TimerViewModel here
+//) {
+//    Column (
+//        modifier = Modifier
+//            .fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(
+//            text = question.question,
+//            style = TextStyle(
+//                textAlign = TextAlign.Center,
+//            ),
+//            modifier = Modifier
+//                .fillMaxHeight(0.3f)
+//                .padding(top = 10.dp),
+//        )
+//        Column {
+////            for (i in question.answerOptions) {
+////                OptionsCard(option = i, correctAns = qnAnswer, onIncrementIndex, onIncrementCorrectNumber)
+////            }
+//            question.answerOptions.forEach { option ->
+//                OptionsCard(
+//                    option = option,
+//                    correctAns = question.correctAnswer,
+//                    onIncrementIndex = onIncrementIndex,
+//                    onIncrementCorrectNumber = onIncrementCorrectNumber,
+//                    timerViewModel = timerViewModel // Pass it down here
+//                )
+//            }
+//        }
+//    }
+//}
+
 @Composable
 fun OptionList(
     question: Question,
+    showCorrectAnswer: Boolean, // Include this flag
     onIncrementIndex: () -> Unit,
     onIncrementCorrectNumber: () -> Unit,
-    timerViewModel: TimerViewModel // Accept TimerViewModel here
+    timerViewModel: TimerViewModel
 ) {
-    Column (
-        modifier = Modifier
-            .fillMaxSize(),
+    Column(
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = question.question,
-            style = TextStyle(
-                textAlign = TextAlign.Center,
-            ),
+            style = TextStyle(textAlign = TextAlign.Center),
             modifier = Modifier
                 .fillMaxHeight(0.3f)
                 .padding(top = 10.dp),
         )
-        Column {
-//            for (i in question.answerOptions) {
-//                OptionsCard(option = i, correctAns = qnAnswer, onIncrementIndex, onIncrementCorrectNumber)
-//            }
-            question.answerOptions.forEach { option ->
-                OptionsCard(
-                    option = option,
-                    correctAns = question.correctAnswer,
-                    onIncrementIndex = onIncrementIndex,
-                    onIncrementCorrectNumber = onIncrementCorrectNumber,
-                    timerViewModel = timerViewModel // Pass it down here
-                )
-            }
+        // Iterate through each answer option and display it
+        question.answerOptions.forEach { option ->
+            OptionsCard(
+                option = option,
+                correctAns = question.correctAnswer,
+                showCorrectAnswer = showCorrectAnswer, // Pass the flag to the OptionsCard
+                onIncrementIndex = onIncrementIndex,
+                onIncrementCorrectNumber = onIncrementCorrectNumber,
+                timerViewModel = timerViewModel
+            )
         }
     }
 }
+
 
 @Composable
 fun Timer(timeLeft: Int) {
@@ -302,4 +397,3 @@ fun ProgressBar(progress: Float) {
         modifier = Modifier.padding(top = 50.dp),
     )
 }
-

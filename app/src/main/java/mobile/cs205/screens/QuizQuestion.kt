@@ -120,7 +120,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
 
     LaunchedEffect(quizId, currentQuestionNumber) {
         Log.d("QuizDebug", "Current Question Number: $currentQuestionNumber, Size: $size")
-        if (quizId != null && currentQuestionNumber > size) {
+        if (quizId != null && size > 0 && currentQuestionNumber > size) {
             showDialog = true
             timerViewModel.resetTimer()
             timerViewModel.stopTimer()

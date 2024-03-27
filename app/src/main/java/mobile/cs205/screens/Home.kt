@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import mobile.cs205.composables.common.navigation.BottomBar
 import mobile.cs205.composables.common.navigation.TopBar
@@ -26,10 +25,11 @@ import mobile.cs205.composables.home.card.TriviaCard
 import mobile.cs205.ui.theme.CS205Theme
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen() {
     Column(
         verticalArrangement = Arrangement.spacedBy(LocalConfiguration.current.screenHeightDp.dp / 20),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -64,7 +64,7 @@ fun HomeScreenPreview() {
 
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
-                HomeScreen(navController)
+                HomeScreen()
             }
 
         }

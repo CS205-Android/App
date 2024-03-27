@@ -2,6 +2,7 @@ package mobile.cs205
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -51,6 +52,14 @@ class TimerViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         timerThread?.interrupt()
+    }
+
+    // Inside TimerViewModel class
+    fun launchCoroutine(delayMillis: Long, action: () -> Unit) {
+        viewModelScope.launch {
+            delay(delayMillis)
+            action()
+        }
     }
 }
 

@@ -5,11 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import mobile.cs205.Screen
-import mobile.cs205.screens.HomeScreen
-import mobile.cs205.screens.QuizListingScreen
 import mobile.cs205.screens.QuizQuestionScreen
 import mobile.cs205.screens.ScaffoldScreen
-import mobile.cs205.screens.SettingsScreen
 
 @Composable
 fun MainNavGraph(navController: NavHostController) {

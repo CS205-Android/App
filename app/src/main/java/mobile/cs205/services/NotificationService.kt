@@ -31,7 +31,7 @@ class NotificationService (
             //Sets the context of the PendingIntent
             activityIntent,
             //Defines what should be done with the pending intent
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+            PendingIntent.FLAG_IMMUTABLE
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)

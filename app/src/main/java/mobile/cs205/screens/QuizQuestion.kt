@@ -2,6 +2,7 @@ package mobile.cs205.screens
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import android.view.WindowManager
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -85,6 +86,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     KeepScreenOn()
 
     LaunchedEffect(key1 = isTimerRunning, key2 = timeLeft) {
+        Log.d("QuizDebug", "Is Timer Running: $isTimerRunning, Time Left: $timeLeft")
         if (!isTimerRunning && timeLeft <= 0) {
 
             showCorrectAnswer = true
@@ -105,16 +107,19 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     }
 
     LaunchedEffect(currentQuestionIndex) {
+        Log.d("QuizDebug", "Current Question Index: $currentQuestionIndex")
         timerViewModel.startTimer()
     }
 
     LaunchedEffect(quizId) {
+        Log.d("QuizDebug", "Quiz ID: $quizId")
         if (quizId != null) {
             size = topics.getOrNull(quizId)?.questions?.size ?: 0
         }
     }
 
     LaunchedEffect(quizId, currentQuestionNumber) {
+        Log.d("QuizDebug", "Current Question Number: $currentQuestionNumber, Size: $size")
         if (quizId != null && currentQuestionNumber > size) {
             showDialog = true
             timerViewModel.resetTimer()
@@ -181,10 +186,13 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                         question = it,
                         onIncrementIndex = {
                             currentQuestionIndex++
+                            Log.d("QuizDebug", "Incremented Current Question Index: $currentQuestionIndex")
                             currentQuestionNumber++
+                            Log.d("QuizDebug", "Incremented Current Question Number: $currentQuestionNumber")
                         },
                         onIncrementCorrectNumber = {
                             correctAnswerNumber++
+                            Log.d("QuizDebug", "Incremented Correct Answer Number: $correctAnswerNumber")
                         },
                         showCorrectAnswer = showCorrectAnswer,
                         timerViewModel = timerViewModel

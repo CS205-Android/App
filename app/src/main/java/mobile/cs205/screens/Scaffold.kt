@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import mobile.cs205.FragmentNavGraph
+import mobile.cs205.navgraph.FragmentNavGraph
 import mobile.cs205.composables.common.navigation.BottomBar
 import mobile.cs205.composables.common.navigation.TopBar
 

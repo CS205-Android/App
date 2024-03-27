@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
+import mobile.cs205.navgraph.MainNavGraph
 import mobile.cs205.services.NotificationService.Companion.CHANNEL_ID
 import mobile.cs205.services.NotificationService.Companion.CHANNEL_NAME
 import mobile.cs205.ui.theme.CS205Theme

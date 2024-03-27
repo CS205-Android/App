@@ -34,8 +34,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import mobile.cs205.composables.common.data.Question
-import mobile.cs205.composables.common.data.topics
+import mobile.cs205.data.quiz.Question
+import mobile.cs205.data.quiz.topics
 import mobile.cs205.ui.theme.md_theme_dark_errorContainer
 
 @Composable

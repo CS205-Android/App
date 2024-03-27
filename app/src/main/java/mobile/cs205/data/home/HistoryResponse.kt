@@ -1,4 +1,4 @@
-package mobile.cs205.data.remote.data
+package mobile.cs205.data.home
 
 import kotlinx.serialization.Serializable
 

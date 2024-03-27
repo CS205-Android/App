@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import mobile.cs205.composables.common.data.Topic
-import mobile.cs205.composables.common.data.topicNames
+import mobile.cs205.data.quiz.Topic
+import mobile.cs205.data.quiz.topicNames
 import mobile.cs205.services.NotificationService
 
 @Composable

@@ -1,4 +1,4 @@
-package mobile.cs205.data.remote
+package mobile.cs205.data.home
 
 val SingaporeImageListing = listOf(
     "https://i.redd.it/xivc8ut4etcx.jpg",

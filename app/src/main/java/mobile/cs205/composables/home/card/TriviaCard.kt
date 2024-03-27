@@ -28,9 +28,9 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
-import mobile.cs205.data.remote.HistoryService
-import mobile.cs205.data.remote.SingaporeImageListing
-import mobile.cs205.data.remote.data.HistoryResponse
+import mobile.cs205.services.HistoryService
+import mobile.cs205.data.home.SingaporeImageListing
+import mobile.cs205.data.home.HistoryResponse
 
 @Composable
 fun TriviaCard() {

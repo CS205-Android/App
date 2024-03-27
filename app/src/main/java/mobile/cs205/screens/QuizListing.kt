@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import mobile.cs205.composables.common.data.topicNames
-import mobile.cs205.composables.common.data.topics
+import mobile.cs205.data.quiz.topicNames
+import mobile.cs205.data.quiz.topics
 import mobile.cs205.composables.quiz.dialog.StartQuizDialog
 
 @Composable

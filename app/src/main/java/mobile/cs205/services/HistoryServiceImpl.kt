@@ -1,9 +1,9 @@
-package mobile.cs205.data.remote
+package mobile.cs205.services
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import mobile.cs205.data.remote.data.HistoryResponse
+import mobile.cs205.data.home.HistoryResponse
 
 class HistoryServiceImpl(private val client: HttpClient) : HistoryService {
     override suspend fun getHistory(): List<HistoryResponse> {

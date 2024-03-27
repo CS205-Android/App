@@ -22,9 +22,7 @@ class NotificationService (
         contentTitle: String,
         contentText: String
     ) {
-        //Intent sets the intent to route to the MainActivity code
         val activityIntent = Intent(context, MainActivity::class.java)
-        //PendingIntent is required for accessing an activity from outside of the activity itself
         val activityPendingIntent = PendingIntent.getActivity(
             //Sets the context of the PendingIntent
             context,

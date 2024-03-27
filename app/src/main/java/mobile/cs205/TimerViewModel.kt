@@ -63,8 +63,6 @@ class TimerViewModel : ViewModel() {
     }
 }
 
-data class SharedTime(@Volatile var time: Int)
-
 class CombinedTimerThread(
     private val totalTimeMillis: Long = 10000, // 10 seconds in milliseconds
     private val onProgressUpdate: (Int, Float) -> Unit

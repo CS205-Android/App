@@ -38,10 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import mobile.cs205.composables.common.data.Question
 import mobile.cs205.composables.common.data.topics
 import mobile.cs205.ui.theme.md_theme_dark_errorContainer
@@ -215,7 +212,6 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
     }
 }
 
-@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun OptionsCard(
     option: String,

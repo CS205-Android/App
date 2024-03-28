@@ -2,6 +2,9 @@ package mobile.cs205.data.quiz.sgtech
 
 import mobile.cs205.data.quiz.Question
 
+/**
+ * First set of questions for Singapore Technological Advancements to be displayed when the QuizQuestion screen runs
+ * */
 val singaporeTechnologicalAdvancementsQuestions = listOf(
     Question(question = "Which advanced technology allows Singaporeans to teleport within the city in 2100?",
         answerOptions = listOf("Teleportation Pods","Sky Tunnels","Quantum Transporters","Mind Control Devices"),

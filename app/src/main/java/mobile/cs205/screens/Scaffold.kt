@@ -13,6 +13,13 @@ import mobile.cs205.navgraph.FragmentNavGraph
 import mobile.cs205.composables.common.navigation.BottomBar
 import mobile.cs205.composables.common.navigation.TopBar
 
+/**
+ * The Scaffold composable represents the Scaffold screen of the application
+ * It is mainly used to render and reuse the top and bottom bar with the contents of Home, QuizListing and Settings depending of the current location in the FragmentNavController
+ * It holds the FragmentNavGraph in it so that the top and bottom bar doesn't appear to be redrawn into the screen but instead transition when a different fragment is requested
+ * @return An Scaffold composable
+ * @param rootNavController : A NavHostController from the root to be passed to screens that requires the rootNavController in the Fragment NavGraph
+ * */
 @Composable
 fun ScaffoldScreen(rootNavController: NavHostController) {
     val navController = rememberNavController()

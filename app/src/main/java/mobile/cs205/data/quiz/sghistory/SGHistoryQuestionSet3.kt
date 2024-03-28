@@ -2,6 +2,9 @@ package mobile.cs205.data.quiz.sghistory
 
 import mobile.cs205.data.quiz.Question
 
+/**
+ * Third set of questions for Singapore History to be displayed when the QuizQuestion screen runs
+ * */
 val singaporeHistory3Questions = listOf(
     Question(question = "What year did World War II start?",
         answerOptions = listOf("1939","1941","1943","1945"),

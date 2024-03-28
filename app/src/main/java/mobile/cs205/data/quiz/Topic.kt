@@ -7,9 +7,25 @@ import mobile.cs205.data.quiz.sghistory.singaporeHistory4Questions
 import mobile.cs205.data.quiz.sglang.singlishQuestions
 import mobile.cs205.data.quiz.sgtech.singaporeTechnologicalAdvancementsQuestions
 
+/**
+ * Holds one of the question in the list of questions in each topic
+ * @param question : Description of question to prompt user
+ * @param answerOptions : Contains 4 possible options for the user to choose
+ * @param correctAnswer : Contains the actual answer for the question
+ * */
 data class Question(val question : String, val answerOptions : List<String>, val correctAnswer : String)
+
+/**
+ * Holds information of one quiz
+ * @param topicName : Name of the quiz
+ * @param description : To be rendered as supporting text in the quiz listing screen
+ * @param questions : Contains a list of Question that is related to the topic
+ * */
 data class Topic(val topicName : String, val description : String, val questions : List<Question>)
 
+/**
+ * Just a list holding all the topic names
+ * */
 val topicNames = listOf(
     "Singapore History #1",
     "Singapore History #2",
@@ -21,6 +37,9 @@ val topicNames = listOf(
     "Singapore Politics"
 )
 
+/**
+ * A list containing all the different quizzes where the user can choose to answer
+ * */
 val topics = listOf(
     Topic(topicName = "Singapore History #1",
         description = "This quiz covers the pre-British portion of Singapore’s History!",

@@ -1,5 +1,8 @@
 package mobile.cs205.data.home
 
+/**
+ * Contains a list of strings that will be displayed for the TriviaCard
+ * */
 val SingaporeImageListing = listOf(
     "https://i.redd.it/xivc8ut4etcx.jpg",
     "https://4kwallpapers.com/images/wallpapers/singapore-cityscape-buildings-skyscrapers-reflection-body-2560x1440-3209.jpg",

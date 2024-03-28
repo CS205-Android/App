@@ -2,6 +2,9 @@ package mobile.cs205.data.quiz.sglang
 
 import mobile.cs205.data.quiz.Question
 
+/**
+ * First set of questions for Singlish to be displayed when the QuizQuestion screen runs
+ * */
 val singlishQuestions = listOf(
     Question(question = "What does \"shiok\" mean in Singlish?",
         answerOptions = listOf("Delicious or satisfying","Sleep","Angry","Confused"),

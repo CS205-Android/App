@@ -2,6 +2,9 @@ package mobile.cs205.data.quiz.sghistory
 
 import mobile.cs205.data.quiz.Question
 
+/**
+ * Second set of questions for Singapore History to be displayed when the QuizQuestion screen runs
+ * */
 val singaporeHistory2Questions = listOf(
     Question(question = "When did the British establish Singapore as a trading post?",
         answerOptions = listOf("1819","1835","1867","1901"),

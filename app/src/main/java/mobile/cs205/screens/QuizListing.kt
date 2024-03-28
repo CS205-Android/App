@@ -14,9 +14,14 @@ import mobile.cs205.data.quiz.topicNames
 import mobile.cs205.data.quiz.topics
 import mobile.cs205.composables.quiz.dialog.StartQuizDialog
 
+/**
+ * The QuizListing composable represents the Quiz Listing screen of the application
+ * @return An LazyColumn and AlertDialog composable
+ * @param rootNavController : A NavHostController from the root to navigate to the QuizQuestion Screen when the user starts a quiz
+ * */
 @Composable
 fun QuizListingScreen(rootNavController: NavHostController) {
-    // State to keep track of which person is opened and when its opened. Will change with actual quiz
+    // State to keep track of the states of the dialog such as open/close and the selected quiz to render the dialog contents
     val openAlertDialog = remember { mutableStateOf(false) }
     val (selectedItem, setSelectedItem) = remember { mutableStateOf("") }
 
@@ -39,8 +44,11 @@ fun QuizListingScreen(rootNavController: NavHostController) {
         }
     }
 
+    /**
+     * When the alert dialog is set to true, the dialog will show
+     * The contents of the dialog will be rendered based on the selectedItem mutable state
+     * */
     when {
-        //when openAlertDialog = true
         openAlertDialog.value -> {
             val topic = topics[topicNames.indexOf(selectedItem)]
             StartQuizDialog(

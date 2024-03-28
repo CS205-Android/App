@@ -2,6 +2,9 @@ package mobile.cs205.data.quiz.sghistory
 
 import mobile.cs205.data.quiz.Question
 
+/**
+ * Fourth set of questions for Singapore History to be displayed when the QuizQuestion screen runs
+ * */
 val singaporeHistory4Questions = listOf(
     Question(question = "When did Singapore gain independence from Malaysia?",
         answerOptions = listOf("1965","1959","1963","1971"),

@@ -16,12 +16,16 @@ import androidx.compose.ui.unit.dp
 import mobile.cs205.composables.home.canvas.HomeCanvas
 import mobile.cs205.composables.home.card.TriviaCard
 
+/**
+ * The Home composable represents the Home screen of the application
+ * It calls the HomeCanvas and TriviaCard composable to display all of its contents
+ * @return A Column composable that represents a fragment for the Home Screen
+ * */
 @Composable
 fun HomeScreen() {
     Column(
         verticalArrangement = Arrangement.spacedBy(LocalConfiguration.current.screenHeightDp.dp / 20),
         horizontalAlignment = Alignment.CenterHorizontally,
-
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -38,6 +42,4 @@ fun HomeScreen() {
         }
         TriviaCard()
     }
-
-
 }

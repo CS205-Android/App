@@ -32,14 +32,26 @@ import mobile.cs205.services.HistoryService
 import mobile.cs205.data.home.SingaporeImageListing
 import mobile.cs205.data.home.HistoryResponse
 
+/**
+ * The TriviaCard composable is only being used in Home screen
+ * The main use of this composable is to create an Elevated Card that contains a trivia historical event that happened in Singapore
+ *
+ * The image and event rendered in this composable is retrieved from the Internet using Coil & Ktor Client respectively
+ * This means that the INTERNET permission must be enabled for the contents of this particular composable to be fetched
+ *
+ * It is not directly coded inside the Home screen so that the logic and states involved to render the card is not being all in one file which can significantly make the maintainability of the file much harder
+ * @return An ElevatedCard composable
+ * */
 @Composable
 fun TriviaCard() {
     val config = LocalConfiguration.current
     val screenWidth = config.screenWidthDp.dp
+    // Creates an image request to fetch the image when rendering the composable
     val imageModel = ImageRequest.Builder(LocalContext.current)
         .data(SingaporeImageListing[SingaporeImageListing.indices.random()])
         .crossfade(true)
         .build()
+    // Create the Ktor client and retrieve data from the network
     val service = HistoryService.create()
     val history = produceState(
         initialValue = HistoryResponse(
@@ -50,6 +62,7 @@ fun TriviaCard() {
         )
     ) {
         val data = service.getHistory()
+        // Retrieve a random value in the list of data returned to be displayed to the user
         value = data[data.indices.random()]
     }
 
@@ -66,6 +79,10 @@ fun TriviaCard() {
                     .background(MaterialTheme.colorScheme.surface)
             },
         ) {
+            /**
+             * SubcomposeAsyncImage loads the image when the network request is fulfilled with the contents being scaled to fit the bounds of the parent box
+             * A CirculuarProgressIndicator will be displayed while the image request is still yet to be fulfilled
+             * */
             SubcomposeAsyncImage(
                 contentScale = ContentScale.FillBounds,
                 model = imageModel,
@@ -84,6 +101,10 @@ fun TriviaCard() {
 
         Column(modifier = Modifier.padding(24.dp)) {
 
+            /**
+             * This particular section is where the history data fetched is being used
+             * The date needs to be concatenated to display properly while the event description can be directly rendered based on the return body by the API
+             * */
             Text(text = "Do You know?", style = MaterialTheme.typography.bodyLarge)
             Text(
                 text = "In ${history.value.day}/${history.value.month}/${history.value.year}",

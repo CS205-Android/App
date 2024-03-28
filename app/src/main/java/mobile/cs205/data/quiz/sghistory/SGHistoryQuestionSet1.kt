@@ -2,6 +2,9 @@ package mobile.cs205.data.quiz.sghistory
 
 import mobile.cs205.data.quiz.Question
 
+/**
+ * First set of questions for Singapore History to be displayed when the QuizQuestion screen runs
+ * */
 val singaporeHistory1Questions = listOf(
     Question(question = "What was the name of Singapore before the arrival of the British?",
         answerOptions = listOf("Temasek","Pulau Ujong","Singapura","Malayu"),

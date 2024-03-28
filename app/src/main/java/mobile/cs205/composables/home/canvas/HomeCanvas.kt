@@ -8,6 +8,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+/**
+ * The HomeCanvas composable that is only being used in Home screen
+ * Utilizing Canvas from 2D graphics, we created a linear gradient partial circular background to welcome the user to our application
+ * @return A Canvas as a composable
+ * */
 @Composable
 fun HomeCanvas() {
     Canvas(modifier = Modifier.fillMaxSize()) {

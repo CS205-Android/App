@@ -14,12 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import mobile.cs205.R
-import mobile.cs205.ui.theme.CS205Theme
 
+/**
+ * The TopBar composable that is only being used in Scaffold screen
+ * The main purpose is to provide a sense of control for the user to understand where they are currently at out of all the screens
+ * In order to prevent the TopBar from moving in scrollable screens, we opt in the use of an experimental pinnedScrollBehaviour to keep it sticky
+ * @return A Top Bar composable that can be injected into a Scaffold.topBar
+ * @param title : Receives the title from the current state that will be set by the BottomBar of our app
+ * */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(title: String = "Hist-O-SG") {
@@ -39,12 +43,4 @@ fun TopBar(title: String = "Hist-O-SG") {
         }
     )
 
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_5)
-@Composable
-fun TopBarPreview() {
-    CS205Theme {
-        TopBar()
-    }
 }

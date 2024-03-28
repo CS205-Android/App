@@ -69,7 +69,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.core.splashscreen)
     implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose)
 
     implementation("io.ktor:ktor-client-core:1.6.3")
     implementation("io.ktor:ktor-client-android:1.6.3")

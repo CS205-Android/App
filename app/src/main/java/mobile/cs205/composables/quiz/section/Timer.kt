@@ -13,6 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * The Timer composable that is only being used in QuizQuestion screen
+ * Renders the time left for the question using the progress bar and timer as text
+ * @param timeLeft: Indicates the amount of time remaining in seconds
+ * @param progress : Indicates in % on how much the progress has reach based on the time remaining
+ * @return A Box composable
+ * */
 @Composable
 fun Timer(timeLeft: Int, progress: Float) {
     Box(

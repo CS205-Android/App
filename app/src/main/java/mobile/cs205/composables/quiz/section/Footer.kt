@@ -9,6 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+/**
+ * The Footer composable that is only being used in QuizQuestion screen
+ * Renders the current question the user is seeing and questions remaining
+ * @param currentQuestionIndex : Index of the current question (starts from 0)
+ * @param size : Size of the quiz topic, indirectly tells the number of questions in the quiz topic
+ * @return A Box composable
+ * */
 @Composable
 fun Footer(
     currentQuestionIndex: Int,

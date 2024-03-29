@@ -8,6 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 
+/**
+ * Keeps the screen on for QuizQuestion screen
+ * Needs to be a DisposableEffect to stop the screen from keeping on when the QuizQuestion Screen is no longer active
+ * @return A DisposableEffect
+ * */
 @Composable
 fun KeepScreenOn() {
     val context = LocalContext.current

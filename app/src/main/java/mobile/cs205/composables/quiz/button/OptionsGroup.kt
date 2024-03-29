@@ -17,6 +17,16 @@ import androidx.compose.ui.unit.dp
 import mobile.cs205.data.quiz.Question
 import mobile.cs205.timer.TimerViewModel
 
+/**
+ * The Options composable that is only being used in QuizQuestion screen
+ * Renders the possible answers of the current question
+ * Also contain some logic to keep track of the chosen answer and synchronization of the timer
+ * @param question : Takes in the current question being displayed with its answers
+ * @param onIncrementIndex : To mutate the state to move to the next question
+ * @param onIncrementCorrectNumber : To mutate the state by increasing it every time the user got the question correct
+ * @param timerViewModel : To call functions in the timerViewModel to start, stop and reset the timer
+ * @return A Box composable
+ * */
 @Composable
 fun OptionsGroup(
     question: Question,
@@ -24,14 +34,18 @@ fun OptionsGroup(
     onIncrementCorrectNumber: () -> Unit,
     timerViewModel: TimerViewModel
 ) {
+    // Keeps track if a choice is chosen and if so, which. It is null by default to indicate no choice is chosen
     val (chosen, setChosen) = remember { mutableStateOf<String?>(null) }
 
+    // Handles the state mutation and timer management when an answer is chosen
     LaunchedEffect(key1 = chosen) {
         if(chosen != null){
+            // Increment correct count when user picked the right answer
             if(chosen == question.correctAnswer){
                 onIncrementCorrectNumber()
             }
             timerViewModel.stopTimer()
+            // Change question after a bit of delay and reset the chosen state
             timerViewModel.launchCoroutine(800) {
                 setChosen(null)
                 onIncrementIndex()

@@ -1,6 +1,11 @@
 package mobile.cs205.ui.theme
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Defines the color for the application
+ * The contents are mainly generated using Material3 plugin
+ * */
+
 val md_theme_light_primary = Color(0xFF9C3D60)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFFFD9E2)

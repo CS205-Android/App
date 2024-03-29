@@ -26,30 +26,43 @@ import mobile.cs205.composables.quiz.service.KeepScreenOn
 import mobile.cs205.data.quiz.topics
 import mobile.cs205.timer.TimerViewModel
 
+/**
+ * The QuizListing composable represents the Quiz Listing screen of the application
+ * @return An LazyColumn and AlertDialog composable
+ * @param navController : A NavHostController from the root to navigate to be passed to CongratulationsDialog so that the user can return back to the Home Screen
+ * @param timerViewModel : A global state provided by the TimerViewModel to be able to manage the synchronization of the timer and progress bar
+ * */
 @Composable
 fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewModel = viewModel()) {
+    // Keeps track of the status of the quiz
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var correctAnswerNumber by remember { mutableIntStateOf(0) }
-    var (showDialog, setShowDialog) = remember { mutableStateOf(false) }
+    val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
     var showCorrectAnswer by remember { mutableStateOf(false) }
 
+    // Obtain the states from the timerViewModel
     val timeLeft by timerViewModel.sharedTime.collectAsState()
     val isTimerRunning by timerViewModel.isTimerRunning.collectAsState()
     val progress by timerViewModel.progress.collectAsState()
 
+    // Initializes the quiz questions to be rendered with the help of the following states
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val arguments = navBackStackEntry?.arguments
     val quizId: Int? = arguments?.getString("quizId")?.toInt()
     var size by remember { mutableIntStateOf(0) }
 
+    // Keeps the screen always active as long as the user is still doing the quiz
     KeepScreenOn()
 
+    // Handler for time limit exceeded, must use a LaunchedEffect to "listen" to state changes instead of immediately running the code when the composable is rendered
     LaunchedEffect(key1 = isTimerRunning, key2 = timeLeft) {
         if (!isTimerRunning && timeLeft <= 0) {
+            // Show the user whether if they got the question correct for 2 seconds
             showCorrectAnswer = true
-            delay(2000) // Give some time to show the correct answer
+            delay(2000)
             showCorrectAnswer = false
 
+            // If the there are more questions, display the next question and start the timer again, else show the CongratulationsDialog
             if (currentQuestionIndex < size - 1) {
                 currentQuestionIndex++
                 timerViewModel.startTimer()
@@ -59,16 +72,19 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
         }
     }
 
+    // Starts the timer if the user has selected an answer instead of timeout
     LaunchedEffect(currentQuestionIndex) {
         timerViewModel.startTimer()
     }
 
+    // Wait for quizId to be passed from path params, obtain the size of the quiz topic when it has been passed
     LaunchedEffect(quizId) {
         if (quizId != null) {
             size = topics.getOrNull(quizId)?.questions?.size ?: 0
         }
     }
 
+    // Handler for quiz ends if the event where user selects an answer
     LaunchedEffect(quizId, currentQuestionIndex) {
         if (quizId != null && size > 0 && currentQuestionIndex >= size) {
             setShowDialog(true)
@@ -77,7 +93,12 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
         }
     }
 
+    /**
+     * The UI rendering part begins here
+     * */
+
     Box(modifier = Modifier.fillMaxSize()) {
+        // Dialog is displayed upon completion
         if (showDialog) {
             CongratulationsDialog(
                 showDialog = setShowDialog,
@@ -85,6 +106,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                 correctAnswerNumber = correctAnswerNumber
             )
         }
+        // When the user has yet to complete the quiz, this portion will run
         Column {
             //TOP PORTION
             Timer(timeLeft = timeLeft, progress = progress)
@@ -94,6 +116,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                     .fillMaxWidth()
                     .fillMaxHeight(0.9f)
             ) {
+                // Obtain the current question to be rendered on the screen
                 val question =
                     if (quizId != null && quizId in topics.indices && currentQuestionIndex in topics[quizId].questions.indices) {
                         topics[quizId].questions[currentQuestionIndex]
@@ -109,7 +132,7 @@ fun QuizQuestionScreen(navController: NavController, timerViewModel: TimerViewMo
                     )
                 }
             }
-            //END PORTION
+            // Shows the current question and remaining questions
             Footer(currentQuestionIndex = currentQuestionIndex, size = size)
         }
     }

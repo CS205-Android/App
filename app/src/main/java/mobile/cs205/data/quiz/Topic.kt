@@ -5,6 +5,8 @@ import mobile.cs205.data.quiz.sghistory.singaporeHistory2Questions
 import mobile.cs205.data.quiz.sghistory.singaporeHistory3Questions
 import mobile.cs205.data.quiz.sghistory.singaporeHistory4Questions
 import mobile.cs205.data.quiz.sglang.singlishQuestions
+import mobile.cs205.data.quiz.sglaw.singaporeLawQuestions
+import mobile.cs205.data.quiz.sgpolitics.singaporePoliticsQuestions
 import mobile.cs205.data.quiz.sgtech.singaporeTechnologicalAdvancementsQuestions
 
 /**
@@ -65,11 +67,13 @@ val topics = listOf(
         description = "Lar lor leh meh, do you know all the Singlish slangs? Find out in this quiz!",
         questions = singlishQuestions
     ),
-//    Topic(topicName = "Singapore Laws",
-//        description = "Did you know about some laws that are unique to Singapore?",
-//        questions = listOf()),
-//    Topic(topicName = "Singapore Politics",
-//        description = "How much did you know about politics in Singapore? Guess we are about to find out now!",
-//        questions = listOf())
+    Topic(topicName = "Singapore Laws",
+        description = "Did you know about some laws that are unique to Singapore?",
+        questions = singaporeLawQuestions
+    ),
+    Topic(topicName = "Singapore Politics",
+        description = "How much did you know about politics in Singapore? Guess we are about to find out now!",
+        questions = singaporePoliticsQuestions
+    )
 )
 

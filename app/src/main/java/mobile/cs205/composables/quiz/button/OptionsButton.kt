@@ -15,6 +15,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import mobile.cs205.ui.theme.md_theme_dark_errorContainer
 
+/**
+ * The OptionsButton composable that is only being used in QuizQuestion screen
+ * Renders each possible choice the user can pick for each question
+ * It will also set the states of OptionsGroup composable and renders differently when an answer is picked
+ * @param chosen : A mutable state value that specifies the choice the user has chosen
+ * @param setChosen : A mutable state setter to "inform" the OptionsGroup if the user select the option as the choice
+ * @param option : The text to display to the user as one of the option
+ * @param correctAns : Holds the correct option for the question
+ * @return A Box composable
+ * */
 @Composable
 fun OptionsButton(
     chosen: String?,
@@ -22,6 +32,7 @@ fun OptionsButton(
     option: String,
     correctAns: String,
 ) {
+    // Based on the user's answer, decide the background color to display (green for choosing correct, red for choosing wrong, tertiary color if no response or not chosen)
     val backgroundColor =
         if (chosen == correctAns && option == chosen) Color(0xFF04B900) else
             (if (option == chosen) md_theme_dark_errorContainer else

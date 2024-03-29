@@ -1,5 +1,11 @@
 package mobile.cs205.timer
 
+/**
+ * The CombinedTimerThreads extends the Thread class that will act as our worker thread in our application.
+ * It handles the interval based updating of the timer value and synchronous update of the progress bar
+ * @param totalTimeMillis: Defines the duration of the timer, generally, always set to 10000
+ * @param onProgressUpdate: Receives a state update function to update the current status of the progress bar and timer
+ * */
 class CombinedTimerThread(
     private val totalTimeMillis: Long = 10000, // 10 seconds in milliseconds
     private val onProgressUpdate: (Int, Float) -> Unit
